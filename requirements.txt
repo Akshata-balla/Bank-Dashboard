@@ -1,0 +1,12 @@
+dash
+pandas
+numpy
+plotly
+matplotlib
+seaborn
+scikit-learn
+nltk
+wordcloud
+openpyxl
+joblib
+gunicorn
