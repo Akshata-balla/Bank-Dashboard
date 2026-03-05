@@ -549,7 +549,8 @@ tab_1_layout = html.Div([
                 {'label': 'Heatmap', 'value': 'heatmap'}
             ],
             value='categorical_bad_rate', # Default selection
-            labelStyle={'display': 'inline-block', 'margin-right': '25px'}
+            inline=True,
+            labelStyle={'margin-right': '25px'}
         ),
     ], style={'textAlign': 'center', 'margin': '20px 0'}),
 
