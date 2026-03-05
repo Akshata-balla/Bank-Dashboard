@@ -1371,6 +1371,7 @@ def update_dashboard(selected_model):
     )
 
     cm = data["confusion_matrix"]
+
     fig = ff.create_annotated_heatmap(
         z=cm,
         x=["Predicted: 0", "Predicted: 1"],
@@ -1380,6 +1381,7 @@ def update_dashboard(selected_model):
     )
 
     fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
+
     # -------- VISUAL PLACEHOLDERS --------
     left_visual_children = []
 
@@ -1395,28 +1397,27 @@ def update_dashboard(selected_model):
             ])
         )
 
-   # 👉 Random Forest feature importance
-if selected_model == "Random Forest":
-    left_visual_children.append(
-        html.Div([
-            html.H4("Random Forest Feature Importance", style={"textAlign": "center"}),
-            html.Img(
-                src=f"data:image/png;base64,{feature_importance_encoded}",
-                style={
-                    "width": "100%",
-                    "height": "auto",
-                    "maxHeight": "450px",
-                    "objectFit": "contain",
-                    "display": "block",
-                    "margin": "0 auto"
-                }
-            )
-        ])
-    )
+    # 👉 Random Forest feature importance
+    if selected_model == "Random Forest":
+        left_visual_children.append(
+            html.Div([
+                html.H4("Random Forest Feature Importance", style={"textAlign": "center"}),
+                html.Img(
+                    src=f"data:image/png;base64,{feature_importance_encoded}",
+                    style={
+                        "width": "100%",
+                        "height": "auto",
+                        "maxHeight": "450px",
+                        "objectFit": "contain",
+                        "display": "block",
+                        "margin": "0 auto"
+                    }
+                )
+            ])
+        )
 
-    
     left_visual = html.Div(left_visual_children)
-    right_visual = html.Div()  # keep right clean
+    right_visual = html.Div()
 
     # -------- BEST MODEL TAG --------
     if selected_model == best_model_name:
@@ -1436,6 +1437,7 @@ if selected_model == "Random Forest":
         left_visual,
         right_visual
     )
+
 
 if __name__ == "__main__":
     app.run_server(host="0.0.0.0", port=10000)
