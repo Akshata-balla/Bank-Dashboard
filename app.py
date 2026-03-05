@@ -320,6 +320,9 @@ import base64
 with open("decision_tree.png", "rb") as f:
     decision_tree_encoded = base64.b64encode(f.read()).decode()
 
+with open("feature_importance.png", "rb") as f:
+    feature_importance_encoded = base64.b64encode(f.read()).decode()
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
@@ -343,25 +346,7 @@ rf_model = RandomForestClassifier(
 
 rf_model.fit(X, y)
 
-# -------- RANDOM FOREST FEATURE IMPORTANCE (PLOTLY) --------
-rf_importance_df = pd.DataFrame({
-    "Feature": X.columns,
-    "Importance": rf_model.feature_importances_
-}).sort_values(by="Importance", ascending=False).head(5)
 
-fig_rf_importance = px.bar(
-    rf_importance_df,
-    x="Importance",
-    y="Feature",
-    orientation="h",
-    title="Top 5 Important Features (Random Forest)"
-)
-
-fig_rf_importance.update_layout(
-    yaxis=dict(categoryorder="total ascending"),
-    title_x=0.5,
-    height=350
-)
 
 
 # --- 6. Dash Application Initialization and Layout ---
@@ -564,7 +549,7 @@ tab_1_layout = html.Div([
                 {'label': 'Heatmap', 'value': 'heatmap'}
             ],
             value='categorical_bad_rate', # Default selection
-            labelStyle={'display': 'inline-block', 'margin-right': '20px'}
+            labelStyle={'display': 'inline-block', 'margin-right': '25px'}
         ),
     ], style={'textAlign': 'center', 'margin': '20px 0'}),
 
@@ -628,7 +613,7 @@ tab_2_layout = html.Div(
                         html.Div(
                             className="auc-box",
                             children=[
-                                html.P("AUC Score", style={"fontWeight": "600"}),
+                                html.P("AUC Score (TEST DATA)", style={"fontWeight": "600"}),
                                 html.H1(id="auc-value")
                             ]
                         ),
@@ -1410,15 +1395,26 @@ def update_dashboard(selected_model):
             ])
         )
 
-    # 👉 Random Forest feature importance
-    if selected_model == "Random Forest":
-        left_visual_children.append(
-            html.Div([
-                html.H4("Random Forest Feature Importance", style={"textAlign": "center"}),
-                dcc.Graph(figure=fig_rf_importance)
-            ])
-        )
+   # 👉 Random Forest feature importance
+if selected_model == "Random Forest":
+    left_visual_children.append(
+        html.Div([
+            html.H4("Random Forest Feature Importance", style={"textAlign": "center"}),
+            html.Img(
+                src=f"data:image/png;base64,{feature_importance_encoded}",
+                style={
+                    "width": "100%",
+                    "height": "auto",
+                    "maxHeight": "450px",
+                    "objectFit": "contain",
+                    "display": "block",
+                    "margin": "0 auto"
+                }
+            )
+        ])
+    )
 
+    
     left_visual = html.Div(left_visual_children)
     right_visual = html.Div()  # keep right clean
 
