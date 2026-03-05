@@ -30,14 +30,15 @@ from nltk.corpus import stopwords
 import io
 import joblib # Import joblib for loading model performance data
 
-# Download NLTK data (if not already downloaded)
+# Download NLTK data safely (for Render deployment)
 try:
-    nltk.data.find('sentiment/vader_lexicon.zip')
-except nltk.downloader.DownloadError:
+    nltk.data.find('sentiment/vader_lexicon')
+except LookupError:
     nltk.download('vader_lexicon')
+
 try:
     nltk.data.find('corpora/stopwords')
-except nltk.downloader.DownloadError:
+except LookupError:
     nltk.download('stopwords')
 
 # Helper function to find optimal threshold
@@ -1441,4 +1442,4 @@ def update_dashboard(selected_model):
     )
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8052)
+    app.run_server(host="0.0.0.0", port=10000)
